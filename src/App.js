@@ -1,46 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import Container from './components/Container';
-import Button from './components/Button';
-import './App.css';
+import ImageContainer from './components/CardContainer';
+import Button from './components/Buttons';
 import axios from 'axios';
 
 function App() {
-
   const [images, setImages] = useState([]);
-  const [index, setIndex] = useState(0);
+
+  const slice = {
+    first: 0,
+    last: 6
+  }
 
   useEffect(() => {
-      const callApi = async () => {
-        try {
-          const response = await axios.get('https://picsum.photos/v2/list')
-          console.log(response);
-          const randomImage = response.data.map(image => image.download_url)
-          setImages(randomImage)
-        } catch (error) {console.error(error)}
+    const callApi = async () => {
+      try {
+        const { data } = await axios.get('https://picsum.photos/v2/list')
+        setImages(data)
+      } catch (error) {
+        console.error(error)
       }
-      callApi()
-  },[])
+    }
+    callApi()
+  }, [])
+
+  console.log('images', images)
+
 
   const handlePrevious = () => {
-    if(index === 0) {
-      setIndex(images.length - 1)
-    } else {
-    setIndex(index - 1)
-    }
+    // handle previous click
+
   }
 
   const handleNext = () => {
-    if(index === images.length -1) {
-      setIndex(0)
-    } else {
-    setIndex(index + 1)
-    }
+    // handle Next click
   }
+
+
   return (
-    <>
-    <Container image={images[index]}/>
-    <Button onClick1={handlePrevious} onClick2={handleNext} />
-    </>
+    <Container>
+      <ImageContainer data={images.slice(slice.first, slice.last)} />
+      <div className="w-full flex justify-center">
+        <Button previous={handlePrevious} next={handleNext} />
+      </div>
+
+    </Container>
   );
 }
 
