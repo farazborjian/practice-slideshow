@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Container = ({image}) => {
+const Container = ({ children }) => {
     return (
-        <div>
-            <img className="img" src={image} alt="slider pic" />
+        <div className="mt-20 container mx-auto">
+            {children}
         </div>
     )
 }
